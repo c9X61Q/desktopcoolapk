@@ -1,0 +1,9 @@
+{
+  "id": "dev.desktopcoolapk.dark",
+  "name": "深色主题",
+  "version": "1.0.0",
+  "author": "DesktopCoolAPK",
+  "description": "纯 CSS 换肤示例，不碰任何逻辑。",
+  "type": "theme",
+  "style": "style.css"
+}

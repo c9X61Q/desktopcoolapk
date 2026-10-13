@@ -1,0 +1,28 @@
+# 构建产物
+build/
+dist/
+*.o
+*.a
+*.so
+*.exe
+*.deb
+*.rpm
+*.pkg.tar.*
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*~
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 本地配置（可能含 token / 账号信息）
+.env
+*.local
+config.local.*
+
+# 生成的资源（由 tools/embed_web.py 产出）
+src/app/web_assets.h

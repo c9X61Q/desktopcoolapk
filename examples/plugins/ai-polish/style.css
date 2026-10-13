@@ -1,0 +1,18 @@
+.ai-polish-btn{
+  background:linear-gradient(135deg,#EAF3FF,#F0EDFF)!important;
+  color:#5B6BC0!important;
+  font-weight:700!important;
+}
+.ai-polish-btn:hover{background:linear-gradient(135deg,#DFEBFF,#E7E2FF)!important;color:#4A5AB0!important}
+.ai-polish-btn.idle{opacity:.62}
+.ai-polish-btn.busy{opacity:1;cursor:progress}
+.ai-polish-btn .ai-spark{
+  font-size:11px;line-height:1;
+  background:linear-gradient(135deg,#4B82C5,#7867CA);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  font-weight:800;
+}
+.ai-polish-btn.busy .ai-spark{
+  animation:aiSpin 1s linear infinite;display:inline-block;
+}
+@keyframes aiSpin{to{transform:rotate(360deg)}}

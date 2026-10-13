@@ -1,0 +1,56 @@
+/* 深色主题示例：只改颜色变量，整个界面跟着变 */
+:root{
+  --bg:#15181C; --card:#1E2228; --text:#E6E9ED; --text2:#A8B0BA; --sub:#7C858F;
+  --hint:#666E78; --divider:#2A3038; --hover:#262C34;
+  --green:#2AB873; --green-dk:#37C983; --green-pale:#1C2A24; --green-soft:#1F3229;
+}
+.topbar{background:#1E2228}
+.search{background:#262C34}
+.search input{color:var(--text)}
+.kbd{background:#2A3038;color:var(--sub)}
+.btn-top{background:#2A3038}
+.feed-text{color:#9AA3AE}
+.hot-no.n1,.hot-no.n2,.hot-no.n3,.hot-no.n4{opacity:.9}
+.feed-pics img{background:#2A3038}
+.note{background:#1A1E24}
+code{background:#262C34}
+.bar{background:#262C34}
+.set-group{background:var(--card)}
+.panel{background:var(--card)}
+.modal{background:var(--card)}
+.field input,.set-input{background:#262C34;color:var(--text)}
+.btn{background:var(--card);color:var(--text2)}
+.act{color:var(--sub)}
+
+/* 补齐：侧栏 / 状态栏 / 滚动条 */
+.sidebar{background:#1A1E24;border-right-color:#2A3038}
+.statusbar{background:#1E2228;border-top-color:#2A3038}
+.user-card{background:#1C2A24}
+.user-card:hover{background:#20362C}
+.login-card{background:#1C2A24}
+.search:focus-within{background:#2A3038}
+.search:focus-within svg{color:var(--green-dk)}
+.search:focus-within input::placeholder{color:var(--hint)}
+.composer{background:var(--card);border-color:#2A3038}
+.composer input{color:var(--text)}
+.cbtn{background:#262C34;color:var(--sub)}
+.cbtn:hover{background:#2F3742;color:var(--text2)}
+.tabs{border-bottom-color:#2A3038}
+.feed{border-color:#2A3038}
+.feed:hover{border-color:#39414B;box-shadow:0 4px 18px rgba(0,0,0,.35)}
+.feed-actions,.detail-stats{border-top-color:#2A3038}
+.cmt:not(:last-child),.follow-item:not(:last-child),
+.app-item:not(:last-child),.hot-item:not(:last-child),
+.dl-item,.dev,.set-row{border-color:#232930}
+.sidebar-foot .settings{color:var(--sub)}
+.sidebar-foot .settings:hover{background:#262C34}
+.detail-back{background:var(--card);border-color:#2A3038}
+.toast{background:rgba(40,46,54,.96)}
+.spinner{border-color:#2A3038;border-top-color:var(--green)}
+::-webkit-scrollbar-thumb{background:#39414B;background-clip:content-box}
+::-webkit-scrollbar-thumb:hover{background:#4A545F;background-clip:content-box}
+.ftag.c1{background:#1E2A38;color:#7EB0E8}
+.ftag.c2{background:#332618;color:#DFA464}
+.ftag.c3{background:#272247;color:#A99BE8}
+.ftag.c4{background:#1B3226;color:#4FC98A}
+.ftag.c5{background:#38251A;color:#E08A5A}

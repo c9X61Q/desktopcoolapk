@@ -1,0 +1,11 @@
+{
+  "id": "dev.desktopcoolapk.ai-polish",
+  "name": "AI 润色",
+  "version": "2.0.0",
+  "author": "DesktopCoolAPK",
+  "description": "在发布框上注入「AI 润色」按钮，按一下根据你已写的内容扩写润色，结果直接回填输入框。",
+  "type": "widget",
+  "entry": "index.js",
+  "style": "style.css",
+  "permissions": ["ui", "storage", "net"]
+}

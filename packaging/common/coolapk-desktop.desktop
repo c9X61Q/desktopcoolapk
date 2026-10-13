@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=DesktopCoolAPK
+Name[zh_CN]=桌面版酷安
+GenericName=Coolapk Client
+GenericName[zh_CN]=酷安客户端
+Comment=第三方酷安桌面客户端
+Comment[zh_CN]=第三方酷安桌面客户端
+Exec=coolapk-desktop %U
+Icon=coolapk-desktop
+Terminal=false
+Categories=Network;InstantMessaging;
+Keywords=酷安;Coolapk;社区;社区客户端;
+StartupWMClass=coolapk-desktop

@@ -1,0 +1,25 @@
+# Maintainer: DesktopCoolAPK Contributors
+pkgname=coolapk-desktop
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="桌面版酷安（第三方酷安客户端）"
+arch=('x86_64')
+url="https://github.com/desktopcoolapk/desktopcoolapk"
+license=('GPL3')
+depends=('webkit2gtk-4.1' 'gtk3' 'curl' 'openssl')
+optdepends=('android-tools: ADB 安装 APK 功能')
+options=('!strip')
+install=coolapk-desktop.install
+
+package() {
+    install -Dm755 "$srcdir/coolapk-desktop" "$pkgdir/usr/bin/coolapk-desktop"
+    install -Dm644 "$srcdir/coolapk-desktop.desktop" \
+        "$pkgdir/usr/share/applications/coolapk-desktop.desktop"
+    for s in 32 48 64 128 256; do
+        install -Dm644 "$srcdir/coolapk-desktop-${s}.png" \
+            "$pkgdir/usr/share/icons/hicolor/${s}x${s}/apps/coolapk-desktop.png"
+    done
+    install -Dm644 "$srcdir/LICENSE" "$pkgdir/usr/share/licenses/coolapk-desktop/LICENSE"
+    install -Dm644 "$srcdir/README.md" "$pkgdir/usr/share/doc/coolapk-desktop/README.md"
+    install -Dm644 "$srcdir/docs/PLUGINS.md" "$pkgdir/usr/share/doc/coolapk-desktop/PLUGINS.md"
+}

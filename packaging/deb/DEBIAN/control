@@ -1,0 +1,18 @@
+Package: coolapk-desktop
+Version: 1.0.0
+Section: net
+Priority: optional
+Architecture: amd64
+Maintainer: DesktopCoolAPK Contributors
+Depends: libwebkit2gtk-4.1-0, libgtk-3-0, libcurl4, libssl3 | libssl1.1
+Recommends: adb
+Homepage: https://github.com/desktopcoolapk/desktopcoolapk
+Description: 桌面版酷安（第三方酷安客户端）
+ 基于 C++ 协议层 + WebView 界面的第三方酷安桌面客户端。
+ .
+ 特性：
+  - 完整信息流：推荐 / 热榜 / 关注 / 动态
+  - 发动态、评论、点赞、收藏
+  - 图片上传到酷安图床
+  - 应用下载与 ADB 一键安装
+  - 插件系统（可换主题、改设备指纹、接入 AI 等）

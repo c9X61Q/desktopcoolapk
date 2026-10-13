@@ -1,0 +1,10 @@
+{
+  "id": "dev.desktopcoolapk.spoofer",
+  "name": "设备伪装器",
+  "version": "1.0.0",
+  "author": "DesktopCoolAPK",
+  "description": "一键切换上报给酷安的设备型号，或自定义任意字段。改完立即生效。",
+  "type": "page",
+  "entry": "index.js",
+  "permissions": ["api", "device", "ui"]
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>桌面版酷安</title>
+<!--CSS-->
+</head>
+<body>
+<div class="app">
+  <!-- 顶栏 -->
+  <div class="topbar">
+    <div class="logo"><b>酷安</b><small>DESKTOP</small></div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21" stroke-linecap="round"/>
+      </svg>
+      <input id="searchInput" placeholder="搜索应用、动态、用户…" autocomplete="off" spellcheck="false">
+      <span class="kbd">Ctrl K</span>
+    </div>
+    <div class="top-right">
+      <button class="btn-top" id="btnTopUser">
+        <span class="ava" id="topAva">访</span>
+        <span id="topUserText">登录 / 注册</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="sidebar" id="sidebar"></div>
+    <div class="center">
+      <div class="center-scroll" id="centerScroll"></div>
+    </div>
+    <div class="rightbar" id="rightbar"></div>
+  </div>
+
+  <div class="statusbar">
+    <span class="dot"></span>
+    <span id="statusText">就绪</span>
+    <div class="right">
+      <span>DesktopCoolAPK</span>
+      <span id="statusUser">未登录</span>
+    </div>
+  </div>
+</div>
+<!--JS-->
+</body>
+</html>
