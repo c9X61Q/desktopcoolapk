@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DesktopCoolAPK 插件开发指南</title>
+<meta name="description" content="桌面版酷安（DesktopCoolAPK）插件开发指南 —— 五种插件类型、完整 API 参考、示例代码">
+<style>
+:root{
+  --green:#1DA765; --green-dk:#178A53; --green-pale:#E7F6EE;
+  --bg:#0F1216; --card:#171B21; --card2:#1D2229;
+  --text:#E6E9ED; --text2:#A8B0BA; --sub:#7C858F; --hint:#5A626C;
+  --divider:#262C34; --code-bg:#11151A; --blue:#4B9FE1; --purple:#9B8BE8;
+  --gold:#E8B654; --red:#F0655F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font:15px/1.75 -apple-system,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
+}
+a{color:var(--green);text-decoration:none}
+a:hover{text-decoration:underline}
+code{
+  font-family:"JetBrains Mono",Consolas,"Courier New",monospace;font-size:.88em;
+  background:var(--code-bg);border:1px solid var(--divider);border-radius:4px;
+  padding:2px 6px;color:#8FD9B0;
+}
+pre{
+  background:var(--code-bg);border:1px solid var(--divider);border-radius:10px;
+  padding:16px 18px;overflow:auto;margin:14px 0;line-height:1.65;
+}
+pre code{background:none;border:none;padding:0;font-size:12.5px;color:#C9D4DE}
+
+/* 布局 */
+.wrap{display:flex;max-width:1280px;margin:0 auto;gap:0}
+nav{
+  width:250px;flex:0 0 250px;position:sticky;top:0;height:100vh;overflow-y:auto;
+  padding:32px 20px 60px;border-right:1px solid var(--divider);
+}
+nav .logo{display:flex;align-items:center;gap:9px;margin-bottom:24px;font-weight:800;font-size:16px}
+nav .logo i{
+  width:26px;height:26px;border-radius:7px;background:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:#fff;font-style:normal;font-weight:900;
+}
+nav .grp{font-size:11px;font-weight:700;color:var(--hint);letter-spacing:1px;margin:20px 0 7px}
+nav a{
+  display:block;padding:6px 11px;border-radius:7px;font-size:13.5px;
+  color:var(--text2);transition:all .13s;
+}
+nav a:hover{background:var(--card2);color:var(--text);text-decoration:none}
+nav a.on{background:var(--green-pale);color:var(--green-dk);font-weight:700}
+main{flex:1;min-width:0;padding:40px 44px 100px;max-width:900px}
+h1{font-size:30px;font-weight:800;margin-bottom:12px;letter-spacing:-.4px}
+h2{
+  font-size:21px;font-weight:700;margin:46px 0 16px;padding-top:14px;
+  border-top:1px solid var(--divider);
+}
+h2:first-of-type{border-top:none;padding-top:0}
+h3{font-size:16px;font-weight:700;margin:26px 0 10px;color:#D8DEE5}
+h4{font-size:14px;font-weight:700;margin:18px 0 8px;color:var(--text2)}
+p{margin:11px 0;color:var(--text2)}
+ul,ol{margin:11px 0 11px 22px;color:var(--text2)}
+li{margin:5px 0}
+strong{color:var(--text);font-weight:700}
+
+.lead{font-size:16.5px;color:var(--text2);margin-bottom:26px;line-height:1.8}
+.note{
+  background:var(--card);border-left:3px solid var(--green);border-radius:0 9px 9px 0;
+  padding:13px 17px;margin:16px 0;font-size:14px;color:var(--text2);
+}
+.note.warn{border-left-color:var(--gold)}
+.note.danger{border-left-color:var(--red)}
+.note b{color:var(--text)}
+.note .t{font-weight:700;color:var(--text);display:block;margin-bottom:4px}
+
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--divider)}
+th{font-weight:700;color:var(--text);background:var(--card);font-size:12.5px}
+td{color:var(--text2)}
+tr:hover td{background:rgba(255,255,255,.015)}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:13px;margin:18px 0}
+.card{
+  background:var(--card);border:1px solid var(--divider);border-radius:11px;
+  padding:15px 17px;transition:border-color .15s,transform .15s;
+}
+.card:hover{border-color:#39414B;transform:translateY(-2px)}
+.card .n{font-weight:700;font-size:14.5px;margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.card .d{font-size:12.5px;color:var(--sub);line-height:1.65}
+.tag{
+  font-size:10px;font-weight:800;letter-spacing:.4px;padding:2px 7px;border-radius:5px;
+  text-transform:uppercase;
+}
+.tag.theme{background:#2A2447;color:#B3A0F4}
+.tag.page{background:#173829;color:#4FC98A}
+.tag.widget{background:#1E2E42;color:#7EB0E8}
+.tag.shell{background:#3A2A18;color:#E0A464}
+.tag.hook{background:#3A1F1F;color:#E88A84}
+
+footer{
+  border-top:1px solid var(--divider);padding:26px 44px;color:var(--sub);
+  font-size:12.5px;text-align:center;
+}
+footer a{color:var(--text2)}
+@media(max-width:900px){
+  nav{display:none}
+  main{padding:28px 20px 80px}
+  h1{font-size:24px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+  <div class="logo"><i>酷</i>DesktopCoolAPK</div>
+  <div class="grp">开始</div>
+  <a href="#intro">简介</a>
+  <a href="#quickstart">快速开始</a>
+  <a href="#types">插件类型</a>
+  <a href="#manifest">清单格式</a>
+  <div class="grp">API</div>
+  <a href="#data">数据接口</a>
+  <a href="#device">设备伪装</a>
+  <a href="#ui">界面控制</a>
+  <a href="#net">网络与 AI</a>
+  <a href="#storage">存储</a>
+  <a href="#hook">请求钩子</a>
+  <a href="#sys">系统操作</a>
+  <div class="grp">深入</div>
+  <a href="#theme">主题变量</a>
+  <a href="#examples">示例插件</a>
+  <a href="#debug">调试</a>
+  <a href="#security">安全边界</a>
+</nav>
+
+<main>
+<h1>插件开发指南</h1>
+<p class="lead">
+DesktopCoolAPK 的插件系统不追求功能完备，而是<b>把 API 面开得足够大</b> ——
+插件可以换掉整个界面、伪装设备指纹、改写请求、接入第三方服务。
+</p>
+
+<h2 id="intro">简介</h2>
+<p>
+插件是放在 <code>~/.config/desktopcoolapk/plugins/</code> 下的普通文件夹，
+包含一个 <code>plugin.json</code> 清单和若干 JS / CSS 文件。
+主程序启动时扫描并加载被启用的插件。
+</p>
+<div class="note">
+  <span class="t">无需编译</span>
+  插件是纯 JS / CSS，改完在设置页点「重新扫描」即可生效，不用重启。
+</div>
+
+<h2 id="quickstart">快速开始</h2>
+<p>最小插件只需要两个文件 —— 只改外观：</p>
+<pre><code>~/.config/desktopcoolapk/plugins/
+└── bluetint/
+    ├── plugin.json
+    └── style.css</code></pre>
+
+<h4>plugin.json</h4>
+<pre><code>{
+  "id":      "dev.me.bluetint",
+  "name":    "蓝色调",
+  "version": "1.0.0",
+  "type":    "theme",
+  "style":   "style.css"
+}</code></pre>
+
+<h4>style.css</h4>
+<pre><code>:root{
+  --green:    #2BA3D4;
+  --green-dk: #1E86B0;
+}</code></pre>
+
+<p>
+放好目录后，打开<b>设置与反馈 → 插件</b>，点「重新扫描」，再打开开关。
+</p>
+
+<h2 id="types">插件类型</h2>
+<div class="cards">
+  <div class="card">
+    <div class="n">主题 <span class="tag theme">theme</span></div>
+    <div class="d">只注入 CSS，改外观。不需要入口 JS。</div>
+  </div>
+  <div class="card">
+    <div class="n">页面 <span class="tag page">page</span></div>
+    <div class="d">往侧栏加一个新页面，自己渲染内容。</div>
+  </div>
+  <div class="card">
+    <div class="n">挂件 <span class="tag widget">widget</span></div>
+    <div class="d">往现有界面注入按钮或元素，不占新页面。</div>
+  </div>
+  <div class="card">
+    <div class="n">外壳 <span class="tag shell">shell</span></div>
+    <div class="d">接管整个 GUI，用你自己的框架重写界面。</div>
+  </div>
+  <div class="card">
+    <div class="n">钩子 <span class="tag hook">hook</span></div>
+    <div class="d">无界面，只拦截和改写请求、响应。</div>
+  </div>
+</div>
+
+<h2 id="manifest">清单格式</h2>
+<pre><code>{
+  "id":          "dev.example.demo",     // 唯一标识（也是存储命名空间）
+  "name":        "显示名",
+  "version":     "1.0.0",
+  "author":      "作者",
+  "description": "一句话说明",
+  "type":        "page",                 // theme|page|widget|shell|hook
+  "entry":       "index.js",             // 非 theme 必需
+  "style":       "style.css",            // 可选
+  "icon":        "icon.png",             // 可选
+  "permissions": ["api","device","ui","storage","net","sys"],
+  "hooks":       ["request","response"]  // 声明后后端才启用钩子
+}</code></pre>
+
+<h2 id="data">数据接口</h2>
+<h3>通用透传</h3>
+<p>白名单内的任意端点都能调，支持 GET / POST：</p>
+<pre><code>await ka.raw("/v6/apk/hotList", { page: 1 });            // GET
+await ka.raw("/v6/feed/createFeed", { message: "hi" }, "POST");
+await ka.get("/v6/user/profile", { uid: "123" });
+await ka.post("/v6/feed/like", { id: "123" });</code></pre>
+<p><b>白名单前缀：</b><br>
+<code>/v6/</code> <code>/v7/</code> <code>/v8/</code> <code>/account/</code> <code>/feed/</code>
+<code>/apk/</code> <code>/user/</code> <code>/topic/</code> <code>/album/</code>
+<code>/collection/</code> <code>/main/</code> <code>/page/</code> <code>/search</code>
+<code>/upload/</code> <code>/vote/</code> <code>/question/</code></p>
+
+<h3>信息流</h3>
+<pre><code>await ka.feeds("recommend", 1);   // recommend | hot | following
+await ka.detail("123456");        // 动态详情（含评论）
+await ka.hot();                   // 今日热议
+await ka.session();               // 当前登录态
+await ka.img(url, 480);           // 图片转 data URL</code></pre>
+
+<h3>发布与互动</h3>
+<pre><code>await ka.createFeed("今天天气不错", { pics: "url1,url2" });
+await ka.deleteFeed("123456");
+await ka.reply("123456", "说得好");
+await ka.like("123456", true);
+await ka.favorite("123456", true);
+await ka.replies("123456", 1);
+await ka.hotReplies("123456", 1);
+await ka.likeList("123456", 1);</code></pre>
+
+<h3>用户与应用</h3>
+<pre><code>await ka.follow("12345", true);
+ka.profile("12345");
+ka.userFeeds("12345", 1);
+ka.userRecentHistory("12345", 1);
+
+ka.apps();                  // 热门应用
+ka.apkInfo("id");           // 详情（含下载地址）
+ka.apkFavorite("id", true);
+ka.apkSearch("关键词", 1);
+ka.apkGifts("id", 1);
+ka.apkComments("id", 1);</code></pre>
+
+<h3>话题 / 相册 / 我的 / 搜索</h3>
+<pre><code>ka.topics();  ka.topicDetail("话题名");  ka.followTopic("话题名", true);
+ka.albums("", 1);  ka.albumDetail("id");
+
+ka.myHistory(1);          // 浏览历史
+ka.collections("uid");    // 收藏单
+ka.notifications(1);      // 通知
+ka.messages(1);           // 私信
+
+ka.search("关键词", 1);
+ka.searchSuggest("关键词");
+ka.searchFeed("关键词", 1);
+ka.searchUser("关键词", 1);</code></pre>
+
+<h2 id="device">设备伪装</h2>
+<p>
+改完<b>立即生效</b>，无需重启 —— User-Agent、<code>X-App-Device</code>、
+Token 里的设备指纹会同步变化。
+</p>
+<pre><code>await ka.device.presets();               // 内置机型列表
+await ka.device.get();                   // 当前设备信息
+await ka.device.set({ preset: "小米 14 Pro" });
+await ka.device.set({ model: "SM-S918B", brand: "samsung", sdkInt: 33 });
+await ka.device.random();                // 随机</code></pre>
+<div class="note warn">
+  <span class="t">注意</span>
+  酷安用<b>数盟（Shuzilm）</b>做设备风控。发动态 / 评论 / 点赞必须携带真实的
+  数盟设备 ID，否则会被拦为「检测到您的网络环境可能异常」。
+  这个 ID 需要在官方 App 中获取后在设置页填写，插件无法伪造。
+</div>
+
+<h2 id="ui">界面控制</h2>
+<h3>注册页面</h3>
+<pre><code>ka.ui.addPage({
+  id: "my-page",
+  title: "我的页面",
+  render(ka) {
+    return `&lt;div class="page-head"&gt;&lt;div class="pt"&gt;标题&lt;/div&gt;&lt;/div&gt;`;
+  }
+});</code></pre>
+
+<h3>注入到现有界面</h3>
+<pre><code>ka.ui.onRender((root, ka) =&gt; {
+  // 每次中栏重绘后调用，root 是中栏容器
+  const actions = root.querySelector(".composer-actions");
+  if (!actions || actions.querySelector("#myBtn")) return;   // 去重
+  const btn = document.createElement("button");
+  btn.className = "cbtn";
+  btn.id = "myBtn";
+  btn.textContent = "我的按钮";
+  btn.onclick = () =&gt; ka.ui.toast("点到了");
+  actions.insertBefore(btn, actions.querySelector('[data-compose="publish"]'));
+});</code></pre>
+
+<h3>其他</h3>
+<pre><code>ka.ui.toast("提示");
+ka.ui.setTheme("css 字符串");            // 注入样式
+ka.ui.modal({ title, body, okText, onOk });
+ka.ui.mount("&lt;div&gt;...&lt;/div&gt;");            // 往中栏追加
+ka.ui.refresh();                         // 刷新界面
+ka.ui.replaceShell(html, init);          // 接管整个 GUI</code></pre>
+<div class="note">
+  <span class="t">图片加载</span>
+  WebView 里不能直接跨源取图。用
+  <code>&lt;img data-src="URL" data-w="240"&gt;</code>
+  然后调 <code>ka.loadImagesIn(root)</code> 批量加载。
+</div>
+
+<h2 id="net">网络与 AI</h2>
+<p>WebView 的 <code>fetch</code> 受跨域限制，插件发请求统一走本地代理：</p>
+<pre><code>const r = await ka.net.request({
+  url: "https://api.example.com/x",
+  method: "POST",
+  headers: { "Content-Type": "application/json", "Authorization": "Bearer xxx" },
+  body: { a: 1 },       // 对象自动 JSON 序列化
+  timeout: 60,
+});
+// → { ok, status, body, error }
+
+await ka.net.post(url, body, headers);
+await ka.net.get(url, headers);</code></pre>
+
+<h3>调用大模型</h3>
+<p>自动适配 OpenAI 与 Anthropic 两种格式：</p>
+<pre><code>const text = await ka.net.chat({
+  endpoint: "https://api.deepseek.com/anthropic/v1/messages",
+  apiKey: "sk-...",
+  model: "deepseek-chat",
+  messages: [
+    { role: "system", content: "你是一个助手" },
+    { role: "user",   content: "你好" },
+  ],
+  temperature: 0.7,
+  maxTokens: 2048,
+  // format: "anthropic" | "openai"，不传则按 endpoint 自动判断
+});</code></pre>
+
+<h2 id="storage">存储</h2>
+<p>按插件 ID 自动隔离，不会互相干扰：</p>
+<pre><code>ka.storage.set("key", { any: "json" });
+ka.storage.get("key", 默认值);
+ka.storage.remove("key");
+ka.storage.keys();</code></pre>
+
+<h2 id="hook">请求钩子</h2>
+<pre><code>ka.hook.on("request", req =&gt; {
+  req.headers["X-Custom"] = "value";
+  return req;
+});
+
+ka.hook.on("response", resp =&gt; {
+  // 可以在这里过滤广告、改写数据
+  return resp;
+});</code></pre>
+<div class="note">
+  钩子需要在清单里声明 <code>"hooks": ["request"]</code>，
+  且插件处于启用状态才会生效。
+</div>
+
+<h2 id="sys">系统操作</h2>
+<pre><code>ka.sys.openFolder(path);
+ka.sys.download(url, name, pkg, size);
+ka.sys.adbStatus();
+ka.sys.adbInstall(pkg);
+ka.sys.settings();</code></pre>
+
+<h2 id="theme">主题变量</h2>
+<p>改外观只需要覆盖这些 CSS 变量：</p>
+<pre><code>:root{
+  --green:#1DA765;  --green-dk:#178A53;  --green-pale:#E7F6EE;
+  --bg:#F5F6F8;     --card:#fff;         --text:#1F2329;
+  --text2:#515761;  --sub:#8A8F99;       --hint:#A1A6AF;
+  --divider:#E8EAED;--hover:#F0F2F5;     --blue:#2BA3D4;
+  --red:#FF5A5F;    --gold:#FFCF62;      --gold-dk:#E8A23B;
+}</code></pre>
+<p>
+可直接复用的类：<code>.panel</code> <code>.set-group</code> <code>.set-row</code>
+<code>.btn</code> <code>.field</code> <code>.page-head</code>
+<code>.center-state</code> <code>.note</code>
+</p>
+
+<h2 id="examples">示例插件</h2>
+<table>
+  <tr><th>插件</th><th>类型</th><th>说明</th></tr>
+  <tr>
+    <td><b>ai-polish</b></td><td><span class="tag widget">widget</span></td>
+    <td>在发布框注入「AI 润色」按钮，按一下根据已写内容扩写。7 种风格（Shift+点击切换）、8 家服务商、右键配置</td>
+  </tr>
+  <tr>
+    <td><b>device-spoofer</b></td><td><span class="tag page">page</span></td>
+    <td>设备伪装面板：预设机型 + 全字段编辑 + 实时预览 User-Agent / X-App-Device</td>
+  </tr>
+  <tr>
+    <td><b>dark-theme</b></td><td><span class="tag theme">theme</span></td>
+    <td>深色主题，纯 CSS 覆盖变量</td>
+  </tr>
+</table>
+<pre><code># 直接复制到插件目录
+cp -r examples/plugins/* ~/.config/desktopcoolapk/plugins/</code></pre>
+
+<h2 id="debug">调试</h2>
+<pre><code>KA_HTTP_LOG=1 ./build/coolapk-desktop</code></pre>
+<p>会打印所有 bind 调用和插件加载情况：</p>
+<pre><code>[bind] GET /plugins
+[bind] GET /plugin/file
+[plugin] 已加载: dev.example.demo page</code></pre>
+<p>插件里也可以用 <code>window.kaLog("消息")</code> 把日志打到终端。</p>
+
+<h2 id="security">安全边界</h2>
+<ul>
+  <li>插件文件读取限制在插件目录内，禁止 <code>..</code> 逃逸，单文件上限 4MB</li>
+  <li><code>/raw</code> 只允许白名单前缀的端点</li>
+  <li>插件运行在与主界面相同的 JS 上下文，<b>没有沙箱</b></li>
+</ul>
+<div class="note danger">
+  <span class="t">只装你信任的插件</span>
+  插件拥有与主程序同等的权限，可以读写本地配置、发起网络请求。
+</div>
+
+</main>
+</div>
+
+<footer>
+  DesktopCoolAPK ·
+  <a href="https://github.com/c9X61Q/desktopcoolapk">GitHub</a> ·
+  GPL-3.0 License ·
+  本项目为第三方客户端，与酷安官方无关
+</footer>
+
+<script>
+// 滚动高亮当前章节
+const links = [...document.querySelectorAll('nav a')];
+const secs  = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+function onScroll(){
+  const y = window.scrollY + 120;
+  let cur = secs[0];
+  for (const s of secs) if (s.offsetTop <= y) cur = s;
+  links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + (cur && cur.id)));
+}
+window.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+</script>
+</body>
+</html>

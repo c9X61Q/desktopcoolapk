@@ -2,6 +2,61 @@
 
 酷安（com.coolapk.market）桌面客户端。协议层逆向自 Android 客户端，界面用 WebView 渲染。
 
+
+## 安装
+
+### 预编译包
+
+从 [Releases](https://github.com/c9X61Q/desktopcoolapk/releases) 下载对应格式：
+
+```bash
+# Debian / Ubuntu
+sudo dpkg -i coolapk-desktop_1.0.0_amd64.deb
+
+# Fedora / RHEL
+sudo rpm -i coolapk-desktop-1.0.0-1.x86_64.rpm
+
+# Arch / Manjaro
+sudo pacman -U coolapk-desktop-1.0.0-1-x86_64.pkg.tar.zst
+```
+
+### 自行打包
+
+```bash
+./packaging/build.sh          # 三种包全构建 → dist/
+./packaging/build.sh deb      # 只构建 .deb
+```
+
+### 从源码编译
+
+```bash
+make            # Linux  → build/coolapk-desktop
+make windows    # Windows → build/coolapk-desktop.exe
+make run        # 编译并运行
+```
+
+## 文档
+
+- [插件开发指南](https://c9x61q.github.io/desktopcoolapk/) —— 在线版，含完整 API 参考
+- [docs/PLUGINS.md](docs/PLUGINS.md) —— 同内容 Markdown 版
+- [COOLAPK_PROTOCOL.md](COOLAPK_PROTOCOL.md) —— 协议逆向资料（70+ 端点）
+
+## 构建依赖
+
+**Linux**：`webkit2gtk-4.1`、`gtk+-3.0`、`libcurl`、`openssl`
+```bash
+# Debian/Ubuntu
+sudo apt install libwebkit2gtk-4.1-dev libgtk-3-dev libcurl4-openssl-dev libssl-dev
+# Arch
+sudo pacman -S webkit2gtk-4.1 gtk3 curl openssl
+# Fedora
+sudo dnf install webkit2gtk4.1-devel gtk3-devel libcurl-devel openssl-devel
+```
+
+**Windows**：WebView2 SDK 已内置在 `src/win_sdk/`，无需额外下载。
+运行时需要系统的 WebView2 Runtime（Win10/11 通常自带）。
+
+
 ## 构建
 
 ```bash
